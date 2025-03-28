@@ -127,3 +127,7 @@ x0 = [100, 2*10**-6]
 globalMinimum = returnGlobalMinimum(freeEnergyObjective,x0)
 print("Local minimum at (Nb, s):", globalMinimum.x)
 print("Function value at minimum:", globalMinimum.fun)
+
+
+
+ # TO DO: Create plots of deltaG vs Nb with varying s, increments of 0.1*10^-5. 
