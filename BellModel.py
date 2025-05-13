@@ -16,6 +16,8 @@ L = 2*10**-6
 kappa = 0.1
 kT = 4.278*10**-14 #Boltzmann Constant in (ergs) @ T = 310K
 
+
+#Section 1: The Bell Model Analytically
 #Assumption is that N1t = N2t (in other words N1t/N2t = 1)
 def AM1(N):
     N1t = N
@@ -87,3 +89,5 @@ plt.title('AM1 Model')
 plt.legend()
 plt.grid(True)
 plt.show()
+
+

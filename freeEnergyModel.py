@@ -37,6 +37,7 @@ gamma = 10**-6 #Compressibility (dyn) coefficient of the glycocalyx
 NB, S = np.meshgrid(Nb, s)
 
 
+
 #Section 1: Plotting the free energy function to visually determine global/local minima of relevance.
 # Fixed Contact Region (A)
 def freeEnergyFunction(Nb,s,A):
@@ -67,6 +68,7 @@ plotDeltaG(NB, S, deltaG_values, '3D Surface Plot of deltaG')
 # Plot 2: Capped deltaG
 plotDeltaG(NB, S, deltaG_cap, '3D Surface Plot of deltaG capped')
 plt.show()
+
 
 
 #Section 2: Finding the Global Minimum of the deltaG function with SciPy's minimize
@@ -120,6 +122,7 @@ for s_value in s:
 plt.show()
 
 
+
 #Section 4: Compute the analytical solution from differentiation of freeEnergyFunction with a fixed s, and fixed A.
 # In other words, plot deltaG vs Nb
 def numOfBondedReceptorsAnalytical(s):
@@ -137,6 +140,7 @@ def numOfBondedReceptorsAnalytical(s):
 for s_value in s: 
     print(s_value)
     print(numOfBondedReceptorsAnalytical(s_value))
+
 
 
 #Section 5: Animation of deltaG varying with contact region A.
