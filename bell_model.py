@@ -3,31 +3,37 @@
 import numpy as np
 from scipy.optimize import fsolve
 
-#Table of Parameters
-A1 = 2*10**-6
-A2 = 2*10**-6
-Amax = 10**-6
-gamma = 10**-6
-tau = 10**-6
-K_L = 10**-8
-L = 2*10**-6
-kappa = 0.1
-kT = 4.278*10**-14 #Boltzmann Constant in (ergs) @ T = 310K
-
-#Section 1: The analytical solution of the Bell Model
-#Assumption is that N1t = N2t (in other words N1t/N2t = 1)
-def AM1(N):
-    N1t = N
-    N2t = N
+def AM1(Nt, params):
     Nb = 0
     A = 0
+
+    N1t = params.N1t
+    N2t = params.N2t
+    kT = params.kT
+    kappa = params.kappa
+    tau = params.tau
+    L = params.L
+    K_L = params.K_L
+    gamma = params.gamma
+    A1 = params.A1
+    A2 = params.A2
+    Amax = params.Amax
+
+    def zeta(s):
+        return A1 * A2 * Gamma(s) / (kT * K(s))
+
+    def K(s):
+        return K_L * np.exp((-0.5 * kappa * (s - L) ** 2) / kT)
+
+    def Gamma(s):
+        return (gamma / s) * np.exp(-s / tau)
 
     S = 0.5 * ( L + (kT / (kappa * tau)) + np.sqrt( (L + (kT / (kappa * tau)))**2 + (4 * kT / kappa) ) )
 
     def equations(x):
-        Nb, S = x
-        eq1 = (Nb / Amax) - ((N - Nb) / A1) * ((N - Nb) / A2) * K(S)
-        eq2 = (Nb / Amax) - (gamma * (S + tau) * np.exp(-S / tau)) / (kappa * tau * S ** 2 * (S - L))
+        NB, s = x
+        eq1 = (NB / Amax) - ((Nt - NB) / A1) * ((Nt - NB) / A2) * K(s)
+        eq2 = (NB / Amax) - (gamma * (s + tau) * np.exp(-s / tau)) / (kappa * tau * s ** 2 * (s - L))
         return [eq1, eq2]
 
     condition1 = zeta(S) > N1t*N2t
@@ -40,7 +46,7 @@ def AM1(N):
 
     elif condition2 and not condition1:
         A = Amax
-        guess = [7*10**6, 1.3*10**-6] #Based on the figure in the paper?
+        guess = [5.85*10**5, 2.6*10**-6] #Based on the figure in the paper?
         solution = fsolve(equations, np.array(guess))
         Nb = solution[0]
         S = solution[1]
@@ -51,18 +57,11 @@ def AM1(N):
 
     #Return dimensionalized values of S,Nb,A
     dimS = ((S/L) - 1)
-    dimN = Nb/N
+    dimN = Nb/Nt
     dimA = A/Amax
 
     return dimS,dimN,dimA
 
-def zeta(s):
-    return A1*A2*Gamma(s)/(kT*K(s))
 
-def K(s):
-    return K_L * np.exp( (-0.5*kappa*(s - L)**2)/kT)
-
-def Gamma(s):
-    return (gamma/s)*np.exp(-s/tau)
 
 
