@@ -3,7 +3,7 @@ import free_energy_model as fem
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
-from config import my_params
+from config import my_params, test_params
 from scipy.optimize import minimize
 
 #Variables
@@ -50,8 +50,7 @@ plt.show()
 # Section 4: Compute minimum analytically with fixed s, fixed A.
 for s_value in s:
     print(s_value)
-    print(fem.num_of_bonded_receptors(s_value, A_fixed,params = my_params))
-
+    print(fem.num_of_bonded_receptors(s_value, A_fixed,params = test_params))
 
 # # #Section 5: Animation of deltaG varying with contact region A.
 A_values = np.linspace(10**-10, 10**-9, num=20)  # A varying over time
@@ -81,3 +80,4 @@ def update(frame):
 ani = animation.FuncAnimation(fig, update, frames=len(A_values), interval=300, blit=False)
 # Save animation as a GIF
 ani.save("deltaG_animation.gif", writer='pillow', fps=5)
+

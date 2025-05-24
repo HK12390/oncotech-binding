@@ -99,8 +99,6 @@ for N in Nt:
     S_num.append((S / dynamic_params.L) - 1)
     A_num.append(A / dynamic_params.Amax)
 
-print(Nb_num)
-
 plt.plot(Nt, Nb_num, label='Nb/N1t')
 plt.plot(Nt, S_num, label='S-L/L')
 plt.plot(Nt, A_num, label='A/Amax')
