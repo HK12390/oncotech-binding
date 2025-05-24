@@ -25,7 +25,6 @@ def free_energy_bending_function(Nb_norm, S_norm, theta_norm, params):
     A_contact = 2*np.pi*R**2*(1 - np.cos(theta))
     deltaG = fem.free_energy_function(Nb, S, A_contact, params)
     deltaG += (4 * np.pi * sigma * (1 - np.cos(theta)))/kT
-
     return deltaG
 
 
