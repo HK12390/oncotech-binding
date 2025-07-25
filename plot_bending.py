@@ -6,7 +6,7 @@ from config import bending_params
 from dataclasses import replace
 
 #Variables
-bending_modulus_values = np.linspace(10**-14,10**-10,num=40)
+bending_modulus_values = np.linspace(0,10**-11,num=40)
 
 #Step 1: Empty arrays
 S_num = []
