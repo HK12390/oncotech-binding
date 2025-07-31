@@ -1,23 +1,41 @@
-import sympy as sp
-def biharmonic_operator(u, x):
-    """
-    Computes the biharmonic operator applied to a function u with respect to variable x.
-    
-    The biharmonic operator is defined as the Laplacian of the Laplacian, or
-    equivalently, the fourth derivative in one dimension.
-    
-    Parameters:
-    u : sympy expression
-        The function to which the biharmonic operator is applied.
-    x : sympy symbol
-        The variable with respect to which the operator is applied.
-        
-    Returns:
-    sympy expression
-        The result of applying the biharmonic operator to u.
-    """
-    laplacian = sp.diff(u, x, 2)
-    biharmonic = sp.diff(laplacian, x, 2)
-    return biharmonic
+from sympy import symbols, Function, Derivative, sin, simplify, init_printing
+from IPython.display import display
 
-sp.pprint(biharmonic_operator(sp.Function('u')(sp.symbols('x')), sp.symbols('x')))
+init_printing()
+
+r, phi, theta = symbols('r phi theta')  
+f = Function('f')
+
+laplacian = (
+    (1/r**2) * Derivative(r**2 * Derivative(f(r, phi, theta), r), r) +
+    (1/(r**2 * sin(phi))) * Derivative(sin(phi) * Derivative(f(r, phi, theta), phi), phi) +
+    (1/(r**2 * sin(phi)**2)) * Derivative(f(r, phi, theta), theta, theta)
+)
+
+lap_phi_only = laplacian.subs({
+    Derivative(f(r, phi, theta), r): 0,
+    Derivative(f(r, phi, theta), r, r): 0,
+    Derivative(f(r, phi, theta), theta): 0,
+    Derivative(f(r, phi, theta), theta, theta): 0
+}).doit()
+
+bi_laplacian = (
+    (1/r**2) * Derivative(r**2 * Derivative(lap_phi_only, r), r) +
+    (1/(r**2 * sin(phi))) * Derivative(sin(phi) * Derivative(lap_phi_only, phi), phi) +
+    (1/(r**2 * sin(phi)**2)) * Derivative(lap_phi_only, theta, theta)
+)
+
+bi_laplacian_phi_only = bi_laplacian.subs({
+    Derivative(f(r, phi, theta), r): 0,
+    Derivative(f(r, phi, theta), r, r): 0,
+    Derivative(f(r, phi, theta), theta): 0,
+    Derivative(f(r, phi, theta), theta, theta): 0,
+    Derivative(lap_phi_only, r): 0,
+    Derivative(lap_phi_only, r, r): 0,
+    Derivative(lap_phi_only, theta): 0,
+    Derivative(lap_phi_only, theta, theta): 0
+}).doit()
+
+simplified_bi_laplacian = simplify(bi_laplacian_phi_only)
+
+display(simplified_bi_laplacian)
